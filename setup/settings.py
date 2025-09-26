@@ -13,6 +13,21 @@ from datetime import timedelta
 from dotenv import load_dotenv
 from pathlib import Path
 import os
+import sys
+
+if sys.platform == 'win32':
+    # Usar threads em vez de processos no Windows
+    CELERY_WORKER_POOL = 'threads'
+    CELERY_WORKER_CONCURRENCY = 4
+    
+    # Configurações de compatibilidade Windows
+    CELERY_TASK_ALWAYS_EAGER = False
+    CELERY_TASK_EAGER_PROPAGATES = True
+    CELERY_WORKER_DISABLE_RATE_LIMITS = True
+    
+    # Evitar problemas de spawn no Windows
+    CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+    CELERY_TASK_ACKS_LATE = True
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, ".env"))
@@ -78,7 +93,7 @@ SIMPLE_JWT = {
 }
 
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
-CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')  
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
