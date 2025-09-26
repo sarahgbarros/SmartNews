@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { register } from "../services/api"; 
 
 const RegisterForm = ({ onSuccess }) => {
-    // ALTERAÇÃO: Nome agora é username, e adicionamos passwordConfirm
+    
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [passwordConfirm, setPasswordConfirm] = useState(""); // Novo campo
+    const [passwordConfirm, setPasswordConfirm] = useState(""); 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [showPasswordConfirm, setShowPasswordConfirm] = useState(false); // Novo estado
+    const [showPasswordConfirm, setShowPasswordConfirm] = useState(false); 
 
     const validateForm = () => {
         if (!username.trim() || !email.trim() || !password.trim() || !passwordConfirm.trim()) {
@@ -38,11 +38,10 @@ const RegisterForm = ({ onSuccess }) => {
 
         setLoading(true);
         try {
-            // ALTERAÇÃO: Chama register com os 4 campos necessários pelo backend
             await register(email, username, password, passwordConfirm); 
             onSuccess();
         } catch (err) {
-            // Captura o erro formatado vindo do api.js
+
             const errorMessage = err.message || "Falha no registro. Tente novamente.";
             setError(errorMessage);
         } finally {
@@ -60,7 +59,6 @@ const RegisterForm = ({ onSuccess }) => {
                 </div>
             )}
 
-            {/* Campo Username (anteriormente Nome) */}
             <div className="input-group">
                 <label htmlFor="username">Nome de Usuário</label>
                 <input 
@@ -74,7 +72,7 @@ const RegisterForm = ({ onSuccess }) => {
                 />
             </div>
 
-            {/* Campo Email */}
+            
             <div className="input-group">
                 <label htmlFor="email">Email</label>
                 <input 
@@ -88,7 +86,6 @@ const RegisterForm = ({ onSuccess }) => {
                 />
             </div>
             
-            {/* Campo Senha com Controle de Visibilidade */}
             <div className="input-group password-group">
                 <label htmlFor="password">Senha</label>
                 <input 
@@ -110,7 +107,6 @@ const RegisterForm = ({ onSuccess }) => {
                 </button>
             </div>
             
-            {/* NOVO: Campo Confirmação de Senha */}
             <div className="input-group password-group">
                 <label htmlFor="password_confirm">Confirme a Senha</label>
                 <input 
