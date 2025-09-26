@@ -20,7 +20,7 @@ Arquitetura Headless: Separação completa entre frontend e backend
 
 🛠️ Tecnologias Utilizadas
 
-Backend
+### Backend
 
 Django 5.2 - Framework web robusto e escalável
 Django REST Framework - Toolkit para construção de APIs REST
@@ -28,14 +28,14 @@ PostgreSQL 16 - Banco de dados relacional
 Celery - Processamento de tarefas assíncronas
 RabbitMQ - Message broker para comunicação assíncrona
 
-Frontend
+### Frontend
 
 React 18 - Biblioteca para construção de interfaces
 Axios - Cliente HTTP para comunicação com a API
 React Router - Navegação SPA
 CSS Modules/Styled Components - Estilização modular
 
-DevOps & Infraestrutura
+### DevOps & Infraestrutura
 
 Docker & Docker Compose - Containerização
 Python 3.12 - Linguagem principal do backend
@@ -43,7 +43,7 @@ Node.js 18 - Runtime para o frontend
 
 💡 Decisões Técnicas
 
-Por que PostgreSQL?
+## Por que PostgreSQL?
 
 ACID Compliance: Garante consistência e integridade dos dados
 
@@ -53,7 +53,7 @@ Performance: Excelente desempenho para consultas complexas com filtros e pagina�
 
 JSON Support: Suporte nativo a campos JSON para metadados flexíveis
 
-Por que RabbitMQ + Celery?
+## Por que RabbitMQ + Celery?
 
 Desacoplamento: Permite processamento assíncrono sem bloquear a API
 
@@ -63,7 +63,7 @@ Confiabilidade: RabbitMQ oferece persistência de mensagens e garantia de entreg
 
 Flexibilidade: Celery integra perfeitamente com Django
 
-Por que Arquitetura Headless?
+## Por que Arquitetura Headless?
 
 Flexibilidade: Frontend e backend podem evoluir independentemente
 
@@ -160,31 +160,31 @@ api/token/refresh/ [name='token_refresh']
 ✅ Funcionalidades Implementadas
 
 
- Backend API REST com Django REST Framework
+ ### Backend API REST com Django REST Framework
 
- Frontend React responsivo com paginação
+ ### Frontend React responsivo com paginação
 
- Filtros por período (dia/semana/mês)
+ ### Filtros por período (dia/semana/mês)
 
- Agente Curador High-Code para geração de conteúdo
+ ### Agente Curador High-Code para geração de conteúdo
 
- Banco PostgreSQL com modelagem relacional
+ ### Banco PostgreSQL com modelagem relacional
 
- Docker Compose para orquestração de serviços
+ ### Docker Compose para orquestração de serviços
 
- Sistema de Mensageria (RabbitMQ + Celery)
+ ### Sistema de Mensageria (RabbitMQ + Celery)
 
- Processamento Assíncrono de conteúdo
+ ### Processamento Assíncrono de conteúdo
   
- Arquitetura Headless completa
+ ### Arquitetura Headless completa
 
- Containerização com Docker
+ ### Containerização com Docker
 
- Organização de Código em estrutura modular
+ ### Organização de Código em estrutura modular
 
 🔧 Desenvolvimento Local
 
-Backend Standalone
+### Backend Standalone
 
 bashcd backend
 
@@ -196,7 +196,7 @@ pip install -r requirements.txt
 
 python manage.py runserver
 
-Frontend Standalone
+### Frontend Standalone
 
 bashcd frontend
 
@@ -204,7 +204,7 @@ npm install
 
 npm start
 
-Executar Celery Worker
+### Executar Celery Worker
 
 bashcd backend
 
