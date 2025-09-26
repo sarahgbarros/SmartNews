@@ -2,7 +2,7 @@ import random
 from datetime import datetime
 from celery import shared_task
 from news.models import News, NewsCategory
-from utils import read_csv, read_json
+from agent.utils import read_csv, read_json
 from typing import List, Dict
 
 TEMPLATES: List[Dict[str, str]] = [
@@ -60,7 +60,7 @@ CATEGORIES = [
     {"id": 4, "name": "Energia"},
 ]
 
-@shared_task
+@shared_task(name="generate_news_task")
 def generate_news_task():
     template = random.choice(TEMPLATES)
     data = {k: random.choice(v) for k, v in DATASETS.items()}
@@ -86,7 +86,7 @@ def generate_news_task():
     )
     return news.title
 
-@shared_task
+@shared_task(name="import_news_from_files")
 def import_news_from_files():
     
     try:
