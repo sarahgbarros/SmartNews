@@ -1,0 +1,42 @@
+[
+    {
+        "title": "Intel anuncia processador quântico híbrido",
+        "content": "A Intel apresentou um protótipo de processador quântico híbrido que combina elementos de computação clássica com qubits de nova geração. A empresa afirmou que essa abordagem pode acelerar o desenvolvimento da computação quântica e reduzir os altos custos de energia enfrentados atualmente. Pesquisadores destacaram que o modelo pode facilitar a execução de algoritmos complexos de otimização, segurança cibernética e inteligência artificial. O lançamento faz parte de um projeto maior da Intel para competir com gigantes como IBM e Google no setor quântico.",
+        "summary": "Intel apresenta processador quântico híbrido com potencial revolucionário.",
+        "source": "MIT Technology Review",
+        "category": 1,
+        "published_at": "2025-09-15T10:00:00"
+    },
+    {
+        "title": "Amazon lança robôs autônomos para logística",
+        "content": "A Amazon revelou uma nova frota de robôs autônomos projetados para otimizar a logística em seus centros de distribuição. Segundo a empresa, os robôs são equipados com sensores de última geração e algoritmos de aprendizado profundo que permitem navegação precisa e segura em ambientes com alta movimentação. Além de reduzir custos, a expectativa é que a tecnologia melhore a eficiência no processamento de pedidos e diminua o tempo de entrega. Especialistas, no entanto, levantam debates sobre o impacto da automação no emprego humano.",
+        "summary": "Amazon aposta em robôs autônomos para logística mais eficiente.",
+        "source": "BBC News",
+        "category": 1,
+        "published_at": "2025-09-14T18:30:00"
+    },
+    {
+        "title": "Samsung investe em baterias de grafeno",
+        "content": "A Samsung anunciou um investimento bilionário em pesquisas de baterias de grafeno, com o objetivo de aumentar a autonomia e reduzir o tempo de carregamento dos dispositivos móveis. As baterias de grafeno prometem carregar até cinco vezes mais rápido que as atuais de íons de lítio, além de apresentarem maior durabilidade e menor risco de superaquecimento. Segundo analistas, essa inovação pode transformar o mercado de smartphones e veículos elétricos, colocando a Samsung em vantagem competitiva frente a rivais como Apple e Xiaomi.",
+        "summary": "Samsung investe pesado em baterias de grafeno para smartphones e carros elétricos.",
+        "source": "Forbes",
+        "category": 1,
+        "published_at": "2025-09-13T09:45:00"
+    },
+    {
+        "title": "Meta expande metaverso com realidade aumentada",
+        "content": "A Meta anunciou novos recursos para seu metaverso, com foco em realidade aumentada integrada ao cotidiano. Entre as novidades estão óculos inteligentes que permitem sobreposição de informações digitais em tempo real, como tradução instantânea e guias de navegação. A empresa também revelou parcerias com instituições educacionais para utilizar a tecnologia em salas de aula, criando experiências imersivas de aprendizado. Apesar do entusiasmo, especialistas alertam sobre preocupações com privacidade e dependência tecnológica.",
+        "summary": "Meta aposta em realidade aumentada para expandir o metaverso.",
+        "source": "The Guardian",
+        "category": 1,
+        "published_at": "2025-09-12T15:20:00"
+    },
+    {
+        "title": "IBM avança em chips neuromórficos",
+        "content": "A IBM revelou um novo avanço em chips neuromórficos inspirados no funcionamento do cérebro humano. Esses chips são capazes de processar informações de forma paralela e altamente eficiente, imitando a atividade de redes neurais biológicas. A empresa afirmou que a tecnologia pode revolucionar aplicações em inteligência artificial, particularmente em dispositivos de borda que exigem processamento local com baixo consumo de energia. Segundo a IBM, os primeiros protótipos já demonstraram desempenho promissor em reconhecimento de padrões complexos.",
+        "summary": "IBM apresenta avanços em chips neuromórficos inspirados no cérebro humano.",
+        "source": "Scientific American",
+        "category": 1,
+        "published_at": "2025-09-11T11:10:00"
+    }
+]
