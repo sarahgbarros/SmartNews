@@ -122,7 +122,7 @@ def generate_news():
             content=content,
             summary=summary,
             source=data["source"],
-            category_id=category_obj,
+            category_id=category_obj.id, 
             published_at=published_at,
         ).exists():
 
@@ -131,7 +131,7 @@ def generate_news():
                 content=content,
                 summary=summary,
                 source=data["source"],
-                category_id=category_obj,
+                category_id=category_obj, 
                 published_at=published_at,
                 created_at=datetime.utcnow(),
             )
@@ -140,35 +140,35 @@ def generate_news():
         else:
             return "Notícia duplicada. Nenhuma nova notícia foi criada."
     except Exception as e:
-        raise e 
+        raise e
 
 def import_news_from_files():
     try:
-        csv_news = read_csv("src/data/tech_news.csv")
-        json_news = read_json("src/data/tech_news_expanded.json")
+        csv_news = read_csv("agent/data/tech_news.csv")
+        json_news = read_json("agent/data/tech_news_expanded.json")
         all_news = csv_news + json_news
 
         news_objects = []
         for n in all_news:
             if n.get("title") and n.get("content"):
-            
+                
                 category_name = n.get("category", "Tecnologia")
                 category_obj = NewsCategory.objects.filter(name=category_name).first()
                 if not category_obj:
                     category_obj = NewsCategory.objects.create(name=category_name)
                 
-                news_objects.append(
-                    News(
-                        title=n["title"],
-                        content=n["content"],
-                        summary=n.get("summary", n["content"][:200]),
-                        source=n.get("source", "Unknown"),
-                        category_id=category_obj,
-                        published_at=n.get("published_at", datetime.now()),
-                        created_at=datetime.utcnow(),
-                    )
+                news_obj = News(
+                    title=n["title"],
+                    content=n["content"],
+                    summary=n.get("summary", n["content"][:200]),
+                    source=n.get("source", "Unknown"),
+                    category_id=category_obj, 
+                    published_at=n.get("published_at", datetime.now()),
+                    created_at=datetime.utcnow(),
                 )
-        News.objects.bulk_create(news_objects)
+                news_obj.save()
+                news_objects.append(news_obj)
+
         return f"{len(news_objects)} notícias importadas com sucesso."
 
     except Exception as e:
@@ -176,6 +176,6 @@ def import_news_from_files():
 
 
 if __name__ == "__main__":
-    generated_news = generate_news()
+    #generated_news = generate_news()
     extracted_news = import_news_from_files()
-    print(f"Generated news: {generated_news}, extracted news: {extracted_news}")
+    #print(f"Generated news: {generated_news}, extracted news: {extracted_news}")
