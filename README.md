@@ -1,4 +1,5 @@
-Smart Newsletter
+## Smart Newsletter
+
 Uma aplicação full-stack para curadoria e exibição inteligente de notícias, desenvolvida com arquitetura headless e comunicação assíncrona.
 
 
