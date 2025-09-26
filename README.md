@@ -4,7 +4,7 @@ Uma aplicação full-stack para curadoria e exibição inteligente de notícias,
 
 🎯 **Sobre o Projeto**
 
-O Newsletter Inteligente automatiza a curadoria de conteúdo através de um agente inteligente, processando e organizando notícias para apresentação em uma interface web moderna e responsiva.
+O Smart Newsletter automatiza a curadoria de conteúdo através de um agente inteligente, processando e organizando notícias para apresentação em uma interface web moderna e responsiva.
 
 **Características Principais:**
 
@@ -82,7 +82,7 @@ O Newsletter Inteligente automatiza a curadoria de conteúdo através de um agen
 
 ```bash
 git clone <url-do-repositorio>
-cd newsletter-inteligente
+cd smartnews
 ```
 
 2. **Configure as variáveis de ambiente**
@@ -253,6 +253,7 @@ volumes:
 * Arquitetura Headless completa
 * Containerização com Docker
 * Organização de Código em estrutura modular
+* Testes Unitários
 
 ---
 
