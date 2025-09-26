@@ -14,7 +14,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'setup.settings')
 django.setup()
 
 from news.models import News, NewsCategory
-from utils import read_csv, read_json
+from agent.utils import read_csv, read_json
 
 
 TEMPLATES: List[Dict[str, str]] = [
@@ -176,6 +176,5 @@ def import_news_from_files():
 
 
 if __name__ == "__main__":
-    #generated_news = generate_news()
-    extracted_news = import_news_from_files()
-    #print(f"Generated news: {generated_news}, extracted news: {extracted_news}")
+    generated_news = generate_news()
+    
