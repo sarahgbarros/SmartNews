@@ -1,0 +1,201 @@
+/* -------------------------------------- */
+/* 1. Estrutura e Centralização da Página */
+/* -------------------------------------- */
+
+/* Container principal, centraliza o card de login na tela */
+.auth-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ocupa a altura total da viewport */
+    background-color: #f0f2f5; /* Fundo cinza suave */
+    padding: 20px;
+    font-family: 'Inter', sans-serif; /* Usando uma fonte moderna */
+}
+
+/* O card que contém o formulário de login */
+.login-card {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Sombra mais proeminente */
+    width: 100%;
+    max-width: 400px;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Título de boas-vindas */
+.login-card h2 {
+    text-align: center;
+    color: #333333;
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* -------------------------------------- */
+/* 2. Estilização dos Inputs e Labels    */
+/* -------------------------------------- */
+
+.input-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555555;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333333;
+    box-sizing: border-box; /* Garante que padding e border não aumentem a largura */
+    transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+    border-color: #007bff; /* Borda azul ao focar */
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+/* Grupo de Senha com o botão de Olho */
+.password-group input {
+    padding-right: 40px; /* Espaço para o botão de alternância */
+}
+
+.toggle-password-btn {
+    position: absolute;
+    right: 10px;
+    bottom: 0px; /* Alinhe com a parte inferior do input-group */
+    transform: translateY(-50%); /* Ajuste vertical para o meio */
+    top: 50%; /* Alinhe com a metade do pai */
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #888888;
+}
+
+
+/* -------------------------------------- */
+/* 3. Botões e Ações Secundárias          */
+/* -------------------------------------- */
+
+.submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff; /* Azul primário */
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.submit-button:hover:not(:disabled) {
+    background-color: #0056b3; /* Azul mais escuro ao passar o mouse */
+}
+
+.submit-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* Estilo do spinner de carregamento */
+.spinner {
+    animation: spin 1s linear infinite;
+    margin-right: 8px;
+    display: inline-block;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Link "Esqueceu a Senha?" */
+.forgot-password-link {
+    text-align: right;
+    margin-bottom: 25px;
+}
+
+.link-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    padding: 0;
+}
+
+/* -------------------------------------- */
+/* 4. Mensagens de Erro e CTA (Registro)  */
+/* -------------------------------------- */
+
+/* Estilo para a mensagem de erro */
+.error-message {
+    background-color: #f8d7da; /* Fundo vermelho claro */
+    color: #721c24; /* Texto vermelho escuro */
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* Rodapé de registro na página */
+.register-cta {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #eeeeee;
+}
+
+.register-cta p {
+    margin: 0;
+    color: #666666;
+}
+
+.register-link {
+    color: #007bff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.register-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Estilo para o Footer da página (Termos/Privacidade) */
+.auth-footer {
+    margin-top: 30px;
+    font-size: 0.85rem;
+    color: #999999;
+    text-align: center;
+}
+
+.auth-footer a {
+    color: #999999;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    color: #666666;
+}
