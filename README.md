@@ -1,227 +1,343 @@
-## Smart Newsletter
+# Smart Newsletter
 
-Uma aplicação full-stack para curadoria e exibição inteligente de notícias, desenvolvida com arquitetura headless e comunicação assíncrona.
+Uma aplicação full-stack para curadoria e exibição inteligente de notícias, desenvolvida com arquitetura headless e processamento assíncrono.
 
+🎯 **Sobre o Projeto**
 
-🎯 Sobre o Projeto
+O Newsletter Inteligente automatiza a curadoria de conteúdo através de um agente inteligente, processando e organizando notícias para apresentação em uma interface web moderna e responsiva.
 
-O Newsletter Inteligente é uma aplicação que automatiza a curadoria de conteúdo através de um agente inteligente, processando e organizando notícias para apresentação em uma interface web moderna e responsiva.
-Características Principais
+**Características Principais:**
 
-Backend API REST: Desenvolvido em Django REST Framework
+* Backend API REST com Django REST Framework
+* Frontend SPA em React responsivo
+* Processamento assíncrono: Celery + Redis
+* Agente Curador: Sistema high-code de curadoria automática de conteúdo
+* Arquitetura Headless: Separação completa entre frontend e backend
+* Monitoramento de tarefas Celery via Flower
 
-Frontend SPA: Interface React responsiva
+---
 
-Processamento Assíncrono: Celery + RabbitMQ para tarefas em background
-
-Agente Curador: Sistema high-code de curadoria automática de conteúdo
-
-Arquitetura Headless: Separação completa entre frontend e backend
-
-🛠️ Tecnologias Utilizadas
+🛠️ **Tecnologias Utilizadas**
 
 ### Backend
 
-Django 5.2 - Framework web robusto e escalável
-Django REST Framework - Toolkit para construção de APIs REST
-PostgreSQL 16 - Banco de dados relacional
-Celery - Processamento de tarefas assíncronas
-RabbitMQ - Message broker para comunicação assíncrona
+* Django 5.2
+* Django REST Framework
+* PostgreSQL 16
+* Celery
+* Redis
+* Flower
 
 ### Frontend
 
-React 18 - Biblioteca para construção de interfaces
-Axios - Cliente HTTP para comunicação com a API
-React Router - Navegação SPA
-CSS Modules/Styled Components - Estilização modular
+* React 18
+* Axios
+* React Router
+* CSS Modules / Styled Components
 
 ### DevOps & Infraestrutura
 
-Docker & Docker Compose - Containerização
-Python 3.12 - Linguagem principal do backend
-Node.js 18 - Runtime para o frontend
+* Docker & Docker Compose
+* Python 3.12
+* Node.js 18
 
-💡 Decisões Técnicas
+---
 
-## Por que PostgreSQL?
+💡 **Decisões Técnicas**
 
-ACID Compliance: Garante consistência e integridade dos dados
+### Por que PostgreSQL?
 
-Relações Complexas: Ideal para modelar relacionamentos entre notícias, categorias e metadados
+* **ACID Compliance:** Consistência e integridade dos dados
+* **Relações Complexas:** Modelagem de notícias, categorias e metadados
+* **Performance:** Consultas complexas com filtros e paginação
+* **JSON Support:** Campos JSON nativos para metadados flexíveis
 
-Performance: Excelente desempenho para consultas complexas com filtros e paginação
+### Por que Redis + Celery?
 
-JSON Support: Suporte nativo a campos JSON para metadados flexíveis
+* **Desacoplamento:** Processamento assíncrono sem bloquear a API
+* **Escalabilidade:** Adição de workers conforme a demanda
+* **Confiabilidade:** Redis oferece persistência opcional
+* **Flexibilidade:** Celery integra perfeitamente com Django
 
-## Por que RabbitMQ + Celery?
+### Por que Arquitetura Headless?
 
-Desacoplamento: Permite processamento assíncrono sem bloquear a API
+* **Flexibilidade:** Frontend e backend evoluem independentemente
+* **Performance:** React SPA oferece experiência de usuário fluida
+* **Escalabilidade:** Suporta múltiplos frontends
+* **Separação de Responsabilidades:** Cada camada foca em sua especialidade
 
-Escalabilidade: Facilita a adição de workers conforme a demanda
+---
 
-Confiabilidade: RabbitMQ oferece persistência de mensagens e garantia de entrega
+📋 **Pré-requisitos**
 
-Flexibilidade: Celery integra perfeitamente com Django
+* Docker 20.10+
+* Docker Compose 2.0+
+* Git
 
-## Por que Arquitetura Headless?
+---
 
-Flexibilidade: Frontend e backend podem evoluir independentemente
+🚀 **Instalação e Execução**
 
-Performance: React SPA oferece experiência de usuário mais fluida
+1. **Clone o repositório**
 
-Escalabilidade: Possibilita múltiplos frontends (web, mobile, etc.)
-
-Separação de Responsabilidades: Cada camada foca em sua especialidade
-
-
-📋 Pré-requisitos
-
-Docker 20.10+
-Docker Compose 2.0+
-Git
-
-🚀 Instalação e Execução
-
-1. Clone o repositório
-bashgit clone <url-do-repositorio>
+```bash
+git clone <url-do-repositorio>
 cd newsletter-inteligente
-2. Configure as variáveis de ambiente
-bash# Crie um arquivo .env na raiz do projeto
+```
+
+2. **Configure as variáveis de ambiente**
+
+```bash
 cp .env.example .env
+```
 
-# Edite as variáveis conforme necessário
+Edite conforme necessário.
 
-DATABASE_URL=postgresql://postgres:password@db:5432/newsletter
-CELERY_BROKER_URL=pyamqp://guest@rabbitmq//
-SECRET_KEY=your-secret-key-here
-DEBUG=True
+3. **Execute com Docker Compose**
 
-3. Execute com Docker Compose
-
-bash# Construa e inicie todos os serviços
+```bash
 docker-compose up --build
+```
 
-# Para executar em background
+Ou em background:
 
+```bash
 docker-compose up -d --build
+```
 
-4. Execute as migrações
+4. **Execute as migrações**
 
-bash# Em outro terminal
+```bash
 docker-compose exec backend python manage.py migrate
 docker-compose exec backend python manage.py collectstatic --noinput
+```
 
-5. Crie um superusuário (opcional)
-bashdocker-compose exec backend python manage.py createsuperuser
+5. **Crie um superusuário (opcional)**
 
-6. Acesse a aplicação
+```bash
+docker-compose exec backend python manage.py createsuperuser
+```
 
-Frontend: http://localhost:3000
+6. **Acesse a aplicação**
 
-API Backend: http://localhost:8000/api/
+* Frontend: [http://localhost:3000](http://localhost:3000)
+* API Backend: [http://localhost:8000/api/](http://localhost:8000/api/)
+* Admin Django: [http://localhost:8000/admin/](http://localhost:8000/admin/)
+* Flower: [http://localhost:5555](http://localhost:5555)
 
-Admin Django: http://localhost:8000/admin/
+---
 
+### 🐳 Docker Compose
 
-🔌 API Endpoints
+```yaml
+version: "3.9"
 
-admin/
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: setup/Dockerfile
+    container_name: django_app
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
 
-api/news/ [name='news-list']
+  frontend:
+    build: ./webapp
+    container_name: react_app
+    volumes:
+      - ./webapp:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
 
-api/news/categories/ [name='news-categories']
+  celery:
+    build:
+      context: .
+      dockerfile: setup/Dockerfile
+    container_name: celery_worker
+    command: celery -A setup worker --loglevel=info
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - backend
+      - redis
 
-api/user/register/ [name='user-register']
+  flower:
+    image: mher/flower:latest
+    container_name: flower
+    command: flower --broker=redis://redis:6379/0 --port=5555
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - celery
 
-api/user/login/ [name='user-login']
+  db:
+    image: postgres:16
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME:-smartnews}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
 
-api/user/preferences/ [name='user-preferences']
+  redis:
+    image: redis:7-alpine
+    container_name: redis_broker
+    ports:
+      - "6379:6379"
 
-api/token/ [name='token_obtain_pair']
+volumes:
+  postgres_data:
+```
 
-api/token/refresh/ [name='token_refresh']
+---
 
-## Exemplo de Resposta
+### 🔌 API Endpoints
 
-    {
-        "id": 34,
-        "title": "Lançamento do NeuroChip X2 pela CloudX",
-        "content": "A CloudX anunciou hoje o lançamento do NeuroChip X2, uma inovação que promete revolucionar o setor de computação em nuvem. O novo dispositivo traz baixo consumo de energia, com foco em melhorar a produtividade. Especialistas acreditam que essa tecnologia pode aumentar a competitividade.",
-        "summary": "A CloudX anunciou hoje o lançamento do NeuroChip X2, uma inovação que promete revolucionar o setor de computação em nuvem. O novo dispositivo traz baixo consumo de energia, com foco em melhorar a prod...",
-        "source": "IDC",
-        "category": {
-            "id": 3,
-            "name": "Negócios"
-        },
-        "published_at": "2025-09-25T23:52:24.072986Z",
-        "created_at": "2025-09-26T03:52:24.153771Z"
-    }
+* `admin/`
+* `api/news/` [name='news-list']
+* `api/news/categories/` [name='news-categories']
+* `api/user/register/` [name='user-register']
+* `api/user/login/` [name='user-login']
+* `api/user/preferences/` [name='user-preferences']
+* `api/token/` [name='token_obtain_pair']
+* `api/token/refresh/` [name='token_refresh']
 
-✅ Funcionalidades Implementadas
+**Exemplo de Resposta**
 
+```json
+{
+    "id": 34,
+    "title": "Lançamento do NeuroChip X2 pela CloudX",
+    "content": "A CloudX anunciou hoje o lançamento do NeuroChip X2...",
+    "summary": "A CloudX anunciou hoje o lançamento do NeuroChip X2...",
+    "source": "IDC",
+    "category": {
+        "id": 3,
+        "name": "Negócios"
+    },
+    "published_at": "2025-09-25T23:52:24.072986Z",
+    "created_at": "2025-09-26T03:52:24.153771Z"
+}
+```
 
- ### Backend API REST com Django REST Framework
+---
 
- ### Frontend React responsivo com paginação
+✅ **Funcionalidades Implementadas**
 
- ### Filtros por período (dia/semana/mês)
+* Backend API REST com Django REST Framework
+* Frontend React responsivo com paginação
+* Filtros por período (dia/semana/mês)
+* Agente Curador High-Code para geração de conteúdo
+* Banco PostgreSQL com modelagem relacional
+* Docker Compose para orquestração de serviços
+* Sistema de Mensageria (Redis + Celery)
+* Processamento Assíncrono de conteúdo
+* Arquitetura Headless completa
+* Containerização com Docker
+* Organização de Código em estrutura modular
 
- ### Agente Curador High-Code para geração de conteúdo
+---
 
- ### Banco PostgreSQL com modelagem relacional
-
- ### Docker Compose para orquestração de serviços
-
- ### Sistema de Mensageria (RabbitMQ + Celery)
-
- ### Processamento Assíncrono de conteúdo
-  
- ### Arquitetura Headless completa
-
- ### Containerização com Docker
-
- ### Organização de Código em estrutura modular
-
-🔧 Desenvolvimento Local
+🔧 **Desenvolvimento Local**
 
 ### Backend Standalone
 
-bashcd backend
-
+```bash
+cd backend
 python -m venv venv
-
 source venv/bin/activate  # Linux/Mac
-
 pip install -r requirements.txt
-
 python manage.py runserver
+```
 
 ### Frontend Standalone
 
-bashcd frontend
-
+```bash
+cd frontend
 npm install
-
 npm start
+```
 
 ### Executar Celery Worker
 
-bashcd backend
-
+```bash
+cd backend
 celery -A newsletter worker --loglevel=info
+```
 
-🏛️ Arquitetura do Agente Curador
+### Executar Flower
+
+```bash
+celery -A newsletter flower --port=5555
+```
+
+---
+
+🏛️ **Arquitetura do Agente Curador**
 
 O agente curador implementa um sistema high-code de processamento de conteúdo:
 
-Geração de Conteúdo: Cria notícias baseadas em templates e regras de negócio
+* **Geração de Conteúdo:** Cria notícias baseadas em templates e regras de negócio
+* **Processamento Assíncrono:** Utiliza Celery para processamento em background
+* **Classificação Inteligente:** Categoriza automaticamente o conteúdo
+* **Persistência:** Salva dados estruturados no PostgreSQL
 
-Processamento Assíncrono: Utiliza Celery para processamento em background
+**Fluxo de Processamento**
+Agente Trigger → **Redis Queue** → Celery Worker → Content Processing → Database
 
-Classificação Inteligente: Categoriza automaticamente o conteúdo
+---
 
-Persistência: Salva dados estruturados no PostgreSQL
+### `.env.example` integrado
 
-Fluxo de Processamento
+```env
+# ===========================
+# Django Settings
+# ===========================
 
-Agente Trigger → RabbitMQ Queue → Celery Worker → Content Processing → Database
+SECRET_KEY=your-secret-key-here
+DEBUG=True
+ALLOWED_HOSTS=*
+
+# ===========================
+# Database
+# ===========================
+
+DB_NAME=''
+DB_USER=''
+DB_PASSWORD=''
+DB_HOST=''
+DB_PORT=''
+
+DATABASE_URL=''
+
+# ===========================
+# Celery / Redis
+# ===========================
+
+CELERY_BROKER_URL=''
+CELERY_RESULT_BACKEND=''
+
+# ===========================
+# Flower
+# ===========================
+
+FLOWER_PORT=''
+```
