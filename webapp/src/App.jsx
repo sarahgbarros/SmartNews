@@ -5,10 +5,9 @@ import NewsPage from "./pages/NewsPage";
 import PreferencesPage from "./pages/PreferencesPage";
 import { getNews } from "./services/api"; 
 
-// Função auxiliar para comparar arrays (shallow comparison)
 const arraysEqual = (a, b) => {
     if (a.length !== b.length) return false;
-    // O sort() é crucial aqui para garantir a ordem da comparação
+    
     const sortedA = [...a].sort(); 
     const sortedB = [...b].sort();
     for (let i = 0; i < sortedA.length; i++) {
@@ -24,8 +23,6 @@ const App = () => {
     const [news, setNews] = useState([]);
     const [period, setPeriod] = useState("day");
 
-    // ... (Outros Handlers de Login/Registro/Back permanecem iguais)
-
     const handleLoginSuccess = () => {
         setUser(true);
         setView("news");
@@ -35,8 +32,7 @@ const App = () => {
         setUser(true);
         setView("preferences"); 
     };
-    
-    // ✅ CORREÇÃO: Verifica se as categorias realmente mudaram antes de atualizar o estado
+
     const handlePreferencesSave = (selectedCategories) => {
         if (!arraysEqual(categories, selectedCategories)) {
             setCategories(selectedCategories);
@@ -48,11 +44,10 @@ const App = () => {
         setView("news"); 
     }
 
-    // ✅ MELHORIA: A busca só precisa de period e categories
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                // Lógica de fallback para a API
+                
                 const categoriesToFetch = categories.length > 0 
                     ? categories 
                     : ['general']; 
@@ -64,7 +59,7 @@ const App = () => {
             }
         };
         fetchNews();
-    }, [period, categories]); // Monitora apenas period e categories
+    }, [period, categories]); 
 
     return (
         <div className="container">
