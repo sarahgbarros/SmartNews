@@ -15,7 +15,7 @@ services:
       - .env
     depends_on:
       - db
-      - rabbitmq
+      - redis
 
   frontend:
     build: ./webapp
@@ -40,7 +40,17 @@ services:
       - .env
     depends_on:
       - backend
-      - rabbitmq
+      - redis
+
+  flower:
+    image: mher/flower:latest
+    container_name: flower
+    command: flower --broker=redis://redis:6379/0 --port=5555
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - celery
 
   db:
     image: postgres:16
@@ -55,15 +65,11 @@ services:
     ports:
       - "${DB_PORT:-5432}:5432"
 
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbit_broker
+  redis:
+    image: redis:7-alpine
+    container_name: redis_broker
     ports:
-      - "5672:5672"  
-      - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
+      - "6379:6379"
 
 volumes:
   postgres_data:
