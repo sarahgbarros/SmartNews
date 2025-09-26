@@ -113,11 +113,11 @@ AUTH_USER_MODEL = 'user.User'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smartnews',
-        'USER':  'postgres',
-        'PASSWORD':  'password',
-        'HOST': 'localhost',
-        'PORT':'5432',
+        'NAME': os.getenv('DB_NAME'),
+        'USER':  os.getenv('DB_USER'),
+        'PASSWORD':  os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
