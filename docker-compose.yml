@@ -1,50 +1,69 @@
-version: '3.8'
+version: "3.9"
 
 services:
-  postgres:
-    image: postgres:15-alpine
-    env_file:
-      - .env
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    env_file:
-      - .env
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-
-  django:
+  backend:
     build:
-      context: ./setup
+      context: .
       dockerfile: setup/Dockerfile
-    env_file:
-      - .env
+    container_name: django_app
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
     ports:
       - "8000:8000"
-    depends_on:
-      - postgres
-      - rabbitmq
-
-  webapp:
-    build:
-      context: ./webapp
-      dockerfile: Dockerfile
     env_file:
       - .env
+    depends_on:
+      - db
+      - rabbitmq
+
+  frontend:
+    build: ./webapp
+    container_name: react_app
     volumes:
       - ./webapp:/app
       - /app/node_modules
     ports:
       - "3000:3000"
+    stdin_open: true
+    tty: true
+
+  celery:
+    build:
+      context: .
+      dockerfile: setup/Dockerfile
+    container_name: celery_worker
+    command: celery -A setup worker --loglevel=info
+    volumes:
+      - .:/app
+    env_file:
+      - .env
     depends_on:
-      - django
+      - backend
+      - rabbitmq
+
+  db:
+    image: postgres:16
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME:-smartnews}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbit_broker
+    ports:
+      - "5672:5672"  
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
 
 volumes:
   postgres_data:
