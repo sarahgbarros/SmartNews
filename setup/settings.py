@@ -16,16 +16,16 @@ import os
 import sys
 
 if sys.platform == 'win32':
-    # Usar threads em vez de processos no Windows
+   
     CELERY_WORKER_POOL = 'threads'
     CELERY_WORKER_CONCURRENCY = 4
     
-    # Configurações de compatibilidade Windows
+    
     CELERY_TASK_ALWAYS_EAGER = False
     CELERY_TASK_EAGER_PROPAGATES = True
     CELERY_WORKER_DISABLE_RATE_LIMITS = True
     
-    # Evitar problemas de spawn no Windows
+    
     CELERY_WORKER_PREFETCH_MULTIPLIER = 1
     CELERY_TASK_ACKS_LATE = True
 
@@ -128,11 +128,11 @@ AUTH_USER_MODEL = 'user.User'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smartnews',
-        'USER':  'postgres',
-        'PASSWORD':  'password',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME'),
+        'USER':  os.getenv('DB_USER'),
+        'PASSWORD':  os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 

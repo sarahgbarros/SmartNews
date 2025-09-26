@@ -8,11 +8,9 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Agora ele enxerga o requirements.txt da raiz
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia só a pasta setup para dentro do container
 COPY setup /app/
 
 EXPOSE 8000
