@@ -1,5 +1,6 @@
 import random
 from datetime import datetime
+from django.utils import timezone
 from typing import List, Dict
 import sys
 import os
@@ -63,7 +64,7 @@ TEMPLATES: List[Dict[str, str]] = [
         ),
     },
     {
-        "title": "{Company} atinge meta de {goal_type} e investe R$ {investment} em {project_name}",
+        "title": "{company} atinge meta de {goal_type} e investe R$ {investment} em {project_name}",
         "content": (
             "A {company} anunciou que atingiu sua meta de {goal_type} com dois anos de antecedência, "
             "reduzindo {reduction_metric} em suas operações globais. Para continuar o avanço, a empresa "
@@ -75,6 +76,8 @@ TEMPLATES: List[Dict[str, str]] = [
 
 DATASETS = {
     "company": ["TechNova", "CloudX", "NeuralSoft", "GreenAI"],
+    "company_a": ["TechNova", "CloudX", "NeuralSoft", "GreenAI"],
+    "company_b": ["InnovateX", "SkyNet", "GreenTech", "NextAI"],
     "product": ["NeuroChip X2", "CloudBox One", "EcoDrone Pro"],
     "sector": ["inteligência artificial", "computação em nuvem", "energia renovável"],
     "features": ["alta performance", "baixo consumo de energia", "design modular"],
@@ -92,6 +95,22 @@ DATASETS = {
     "products": ["soluções de IA", "plataformas em nuvem", "dispositivos inteligentes"],
     "region": ["América Latina", "Europa", "Ásia"],
     "source": ["Gartner", "IDC", "McKinsey", "Forbes Tech"],
+    "value": ["200", "450", "780"],
+    "goal": ["expandir mercado", "aumentar receita", "melhorar eficiência"],
+    "market": ["global", "regional", "local"],
+    "related_sector": ["tecnologia", "finanças", "energia"],
+    "governing_body": ["Conselho Federal", "Agência Nacional de Tecnologia", "Ministério da Economia"],
+    "main_objective": ["proteger consumidores", "garantir transparência", "fomentar inovação"],
+    "target_group": ["empresas", "cidadãos", "startups"],
+    "benefit": ["oportunidades de crescimento", "novas parcerias", "eficiência operacional"],
+    "risk": ["aumento de custos", "diminuição da competitividade", "impacto ambiental"],
+    "effective_date": ["2025-01-01", "2025-06-01", "2025-12-01"],
+    "goal_type": ["lucro", "eficiência", "sustentabilidade"],
+    "investment": ["50", "120", "300"],
+    "project_name": ["Project Alpha", "Green Initiative", "Cloud Expansion"],
+    "reduction_metric": ["custos operacionais", "emissões de CO2", "tempo de produção"],
+    "focus_area": ["inovação tecnológica", "sustentabilidade", "expansão de mercado"],
+    "market_trend": ["crescimento acelerado", "digitalização", "automação"],
 }
 
 CATEGORIES = [
@@ -122,7 +141,7 @@ def generate_news():
             content=content,
             summary=summary,
             source=data["source"],
-            category_id=category_obj.id, 
+            category_id=category_obj, 
             published_at=published_at,
         ).exists():
 
@@ -143,38 +162,46 @@ def generate_news():
         raise e
 
 def import_news_from_files():
+    
     try:
-        csv_news = read_csv("agent/data/tech_news.csv")
-        json_news = read_json("agent/data/tech_news_expanded.json")
+        csv_news = read_csv("data/tech_news.csv")
+        json_news = read_json("data/tech_news_expanded.json")
+        
+        csv_news = csv_news if isinstance(csv_news, list) else []
+        json_news = json_news if isinstance(json_news, list) else []
+        
         all_news = csv_news + json_news
+        
+        if not all_news:
+            return "Nenhuma notícia encontrada nos arquivos."
 
         news_objects = []
         for n in all_news:
             if n.get("title") and n.get("content"):
                 
                 category_name = n.get("category", "Tecnologia")
-                category_obj = NewsCategory.objects.filter(name=category_name).first()
-                if not category_obj:
-                    category_obj = NewsCategory.objects.create(name=category_name)
+                category_obj, created = NewsCategory.objects.get_or_create(name=category_name)
                 
-                news_obj = News(
-                    title=n["title"],
-                    content=n["content"],
-                    summary=n.get("summary", n["content"][:200]),
-                    source=n.get("source", "Unknown"),
-                    category_id=category_obj, 
-                    published_at=n.get("published_at", datetime.now()),
-                    created_at=datetime.utcnow(),
+                news_objects.append(
+                    News(
+                        title=n["title"],
+                        content=n["content"],
+                        summary=n.get("summary", n["content"][:200]),
+                        source=n.get("source", "Unknown"),
+                        category_id=category_obj, 
+                        published_at=n.get("published_at", timezone.now()),
+                        created_at=timezone.now()
+                    )
                 )
-                news_obj.save()
-                news_objects.append(news_obj)
 
+        News.objects.bulk_create(news_objects, ignore_conflicts=True)
         return f"{len(news_objects)} notícias importadas com sucesso."
-
+    
     except Exception as e:
         raise e
 
 
 if __name__ == "__main__":
     generated_news = generate_news()
+    import_news_from_files = import_news_from_files()
     
