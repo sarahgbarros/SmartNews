@@ -11,7 +11,7 @@ class News(models.Model):
     content = models.TextField(null=False)
     summary = models.TextField()
     source = models.CharField(max_length=100)
-    category_id = models.ForeignKey(NewsCategory, on_delete=models.PROTECT)
+    category = models.ForeignKey(NewsCategory, on_delete=models.PROTECT)
     published_at = models.DateTimeField()
     created_at =models.DateTimeField(auto_now_add=True)
 

@@ -122,12 +122,16 @@ export async function register(email, username, password, passwordConfirm) {
     return { user: user }; 
 }
 
-export const getNews = async (period, categories) => {
-    const queryParams = new URLSearchParams({
-        category_id__in: categories.join(','), 
+export const getNews = async (period, categories = []) => {
+    const params = {
         period: period,
-    }).toString();
+    };
+
+    if (categories && categories.length > 0) {
+        params.category__in = categories.join(',');
+    }
     
+    const queryParams = new URLSearchParams(params).toString();
     const url = `${API_URL}/news/?${queryParams}`;
 
     try {

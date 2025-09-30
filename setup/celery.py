@@ -6,4 +6,4 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "setup.settings")
 
 app = Celery("setup")
 app.config_from_object("django.conf:settings", namespace="CELERY")
-app.autodiscover_tasks(['agent']) 
+app.autodiscover_tasks(['agent', 'agent.consumer', 'agent.tasks']) 

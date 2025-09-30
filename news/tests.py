@@ -10,11 +10,11 @@ class NewsModelTest(TestCase):
             content="Conteúdo de teste",
             summary="Resumo de teste",
             source="Fonte Teste",
-            category_id=category,
+            category=category,
             published_at=datetime.now(),
             created_at=datetime.utcnow()
         )
         self.assertEqual(str(news.title), "Título Teste")
-        self.assertEqual(news.category_id.name, "Tecnologia")
+        self.assertEqual(news.category.name, "Tecnologia")
         self.assertIsInstance(news.published_at, datetime)
         self.assertIsInstance(news.created_at, datetime)

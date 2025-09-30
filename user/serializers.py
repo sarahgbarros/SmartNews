@@ -30,7 +30,7 @@ class UserLoginSerializer(serializers.Serializer):
 
 class UserPreferenceSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
-    category_id = serializers.UUIDField(write_only=True)
+    category = serializers.UUIDField(write_only=True)
     
     class Meta:
         model = UserPreference
