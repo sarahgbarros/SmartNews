@@ -95,4 +95,4 @@ Admin Django: http://localhost:8000/admin/
 Flower (Monitor Celery): http://localhost:5555
 
 🏛️ Fluxo de Processamento do Agente Curador
-Agente Trigger (start_curation.py) → Redis Queue (producer) → Celery Worker (celery_producer) → Roteamento → Redis Queue (consumer) → Celery Worker (celery_consumer com Gemini Service) → PostgreSQL (Persistência)
+Agente Trigger (start_curation.py) → Redis Queue (producer) → Celery Worker (tasks.py) → Roteamento → Redis Queue (consumer.py) → Celery Worker (consumer com Gemini Service) → PostgreSQL (Persistência)
