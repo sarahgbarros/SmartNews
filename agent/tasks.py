@@ -1,11 +1,10 @@
 import random
 
 from datetime import datetime
-from django.db import IntegrityError
 from django.utils import timezone
 from celery import shared_task
-from news.models import News, NewsCategory
 from agent.utils import read_csv, read_json
+from .consumer import process_and_save_news_task
 from typing import List, Dict
 
 TEMPLATES: List[Dict[str, str]] = [
@@ -118,43 +117,30 @@ def generate_news_task():
     try:
         title = template["title"].format(**data)
         content = template["content"].format(**data)
-        summary = content[:200] + "..." if len(content) > 200 else content
         category = random.choice(CATEGORIES)["name"]
-        published_at = datetime.now()
 
-        category_obj = NewsCategory.objects.filter(name=category).first()
-        if not category_obj:
-            category_obj = NewsCategory.objects.create(name=category)
+        news_data = {
+            "title": title,
+            "content": content,
+            "source": data["source"],
+            "category": category,
+            "published_at": datetime.now().isoformat(),
+        }
 
-        if not News.objects.filter(
-            title=title,
-            content=content,
-            summary=summary,
-            source=data["source"],
-            category_id=category_obj, 
-            published_at=published_at,
-        ).exists():
-
-            news = News.objects.create(
-                title=title,
-                content=content,
-                summary=summary,
-                source=data["source"],
-                category_id=category_obj, 
-                published_at=published_at,
-                created_at=datetime.utcnow(),
-            )
-            return news.title
+        process_and_save_news_task.apply_async((news_data,), queue='consumer')
         
-        else:
-            return "Notícia duplicada. Nenhuma nova notícia foi criada."
-    except Exception as e:
-        raise e
+        return news_data
+        
+    except Exception as err:
+        print(f"Erro ao gerar e enviar notícia para a fila: {err}")
+        raise err
 
 
 
 @shared_task(name="import_news_from_files")
-def import_news_from_files():
+def import_news_from_files_task():
+
+    count = 0
     
     try:
         csv_news = read_csv("agent/data/tech_news.csv")
@@ -168,30 +154,23 @@ def import_news_from_files():
         if not all_news:
             return "Nenhuma notícia encontrada nos arquivos."
 
-        news_objects = []
         for n in all_news:
             if n.get("title") and n.get("content"):
                 
-                category_name = n.get("category", "Tecnologia")
-                category_obj, created = NewsCategory.objects.get_or_create(name=category_name)
-                
-                news_objects.append(
-                    News(
-                        title=n["title"],
-                        content=n["content"],
-                        summary=n.get("summary", n["content"][:200]),
-                        source=n.get("source", "Unknown"),
-                        category_id=category_obj, 
-                        published_at=n.get("published_at", timezone.now()),
-                        created_at=timezone.now()
-                    )
-                )
+                news_data = {
+                    "title": n["title"],
+                    "content": n["content"],
+                    "source": n.get("source", "Unknown"),
+                    "category": n.get("category", "Tecnologia"),
+                    "published_at": n.get("published_at", timezone.now().isoformat()),
+                }
+        
+                process_and_save_news_task.apply_async((news_data,), queue='consumer')
+                count += 1
 
-        News.objects.bulk_create(news_objects, ignore_conflicts=True)
-        return f"{len(news_objects)} notícias importadas com sucesso."
-
-    except IntegrityError as ie:
-        raise ie
-    except Exception as e:
-        raise e
+        return news_data
+    
+    except Exception as err:
+        print(f"Erro ao gerar e enviar notícia para a fila: {err}")
+        raise err
     

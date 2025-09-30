@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'news',
     'user',
+    'agent',
     'django_celery_results',
     'django_celery_beat',
     'rest_framework',

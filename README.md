@@ -1,344 +1,98 @@
-# Smart Newsletter
+# Smart Newsletter 🗞️
+Uma aplicação full-stack para curadoria e exibição inteligente de notícias, desenvolvida com arquitetura headless e processamento assíncrono. O projeto é centrado em um Agente Curador High-Code que utiliza IA (Gemini) para processar e resumir conteúdo automaticamente.
 
-Uma aplicação full-stack para curadoria e exibição inteligente de notícias, desenvolvida com arquitetura headless e processamento assíncrono.
+🎯 Sobre o Projeto
+O Smart Newsletter automatiza a curadoria de conteúdo, garantindo que as notícias sejam processadas, resumidas (via Gemini) e persistidas em background antes de serem servidas a uma interface web moderna.
 
-🎯 **Sobre o Projeto**
+## Características Principais:
+Agente Curador High-Code: Sistema automático de curadoria e ingestão de conteúdo.
 
-O Smart Newsletter automatiza a curadoria de conteúdo através de um agente inteligente, processando e organizando notícias para apresentação em uma interface web moderna e responsiva.
+Arquitetura Produtor/Consumidor: Celery Workers segregados por filas para desacoplar tarefas (Produtor: busca/disparo; Consumidor: IA/DB).
 
-**Características Principais:**
+Inteligência Artificial: Integração com a Gemini API para gerar resumos concisos e profissionais.
 
-* Backend API REST com Django REST Framework
-* Frontend SPA em React responsivo
-* Processamento assíncrono: Celery + Redis
-* Agente Curador: Sistema high-code de curadoria automática de conteúdo
-* Arquitetura Headless: Separação completa entre frontend e backend
-* Monitoramento de tarefas Celery via Flower
+Backend API REST: Desenvolvido com Django REST Framework.
 
----
+Frontend SPA: Interface moderna e responsiva em React.
 
-🛠️ **Tecnologias Utilizadas**
+Monitoramento: Flower para acompanhamento em tempo real das tarefas Celery.
 
-### Backend
+🛠️ Tecnologias Utilizadas
+Backend: Django 5.2, Django REST Framework
 
-* Django 5.2
-* Django REST Framework
-* PostgreSQL 16
-* Celery
-* Redis
-* Flower
+Processamento: Celery, Redis (7.x)
 
-### Frontend
+Inteligência Artificial: Google Gemini API (gemini-2.5-flash)
 
-* React 18
-* Axios
-* React Router
-* CSS Modules / Styled Components
+Banco de Dados: PostgreSQL 16
 
-### DevOps & Infraestrutura
+Frontend: React 18, Axios, React Router
 
-* Docker & Docker Compose
-* Python 3.12
-* Node.js 18
+DevOps: Docker & Docker Compose 3.9
 
----
+💡 Decisões Técnicas
+1. Arquitetura Assíncrona (Celery Produtor/Consumidor)
+O pipeline de curadoria é dividido em dois workers e filas dedicadas, garantindo que tarefas lentas (Chamadas à Gemini) não bloqueiem o pipeline de ingestão.
 
-💡 **Decisões Técnicas**
+Fila producer: Tarefas rápidas (busca e disparo).
 
-### Por que PostgreSQL?
+Fila consumer: Tarefas lentas e caras (processamento de IA e persistência no DB).
 
-* **ACID Compliance:** Consistência e integridade dos dados
-* **Relações Complexas:** Modelagem de notícias, categorias e metadados
-* **Performance:** Consultas complexas com filtros e paginação
-* **JSON Support:** Campos JSON nativos para metadados flexíveis
+2. Por que PostgreSQL?
+ACID Compliance: Essencial para a integridade dos dados, garantindo que cada notícia seja salva de forma atômica.
 
-### Por que Redis + Celery?
+Relações Complexas: Modelagem robusta de notícias, categorias e metadados.
 
-* **Desacoplamento:** Processamento assíncrono sem bloquear a API
-* **Escalabilidade:** Adição de workers conforme a demanda
-* **Confiabilidade:** Redis oferece persistência opcional
-* **Flexibilidade:** Celery integra perfeitamente com Django
+3. Por que Arquitetura Headless?
+Flexibilidade e Escalabilidade: Frontend e backend evoluem e escalam independentemente, permitindo que a API atenda a múltiplos clientes.
 
-### Por que Arquitetura Headless?
+📋 Pré-requisitos
+Docker 20.10+
 
-* **Flexibilidade:** Frontend e backend evoluem independentemente
-* **Performance:** React SPA oferece experiência de usuário fluida
-* **Escalabilidade:** Suporta múltiplos frontends
-* **Separação de Responsabilidades:** Cada camada foca em sua especialidade
+Docker Compose 2.0+
 
----
+Git
 
-📋 **Pré-requisitos**
+Variáveis de Ambiente: A chave da API Gemini (GEMINI_API_KEY) deve ser configurada no seu arquivo .env e é carregada automaticamente para os workers Celery.
 
-* Docker 20.10+
-* Docker Compose 2.0+
-* Git
-
----
-
-🚀 **Instalação e Execução**
-
-1. **Clone o repositório**
-
-```bash
+🚀 Instalação e Execução
+1. Clone o repositório
 git clone <url-do-repositorio>
 cd smartnews
-```
 
-2. **Configure as variáveis de ambiente**
+2. Configure as variáveis de ambiente
+Crie e edite o arquivo .env com as credenciais do banco e a chave Gemini:
 
-```bash
 cp .env.example .env
-```
 
-Edite conforme necessário.
+3. Execute com Docker Compose
+Este comando inicia todos os 7 serviços (DB, Redis, Backend, Frontend, Produtor, Consumidor, Beat e Flower):
 
-3. **Execute com Docker Compose**
-
-```bash
 docker-compose up --build
-```
 
-Ou em background:
+4. Setup Inicial
+Execute as migrações do banco de dados e a coleta de arquivos estáticos (essencial para o Admin):
 
-```bash
-docker-compose up -d --build
-```
-
-4. **Execute as migrações**
-
-```bash
-docker-compose exec backend python manage.py migrate
+docker-compose exec backend python manage.py migrate --noinput
 docker-compose exec backend python manage.py collectstatic --noinput
-```
 
-5. **Crie um superusuário (opcional)**
+5. Iniciar a Curadoria
+O fluxo de curadoria é iniciado através de uma task Celery.
 
-```bash
-docker-compose exec backend python manage.py createsuperuser
-```
+Para Teste Imediato: Dispare o processo usando o Management Command:
 
-6. **Acesse a aplicação**
+docker-compose exec backend python manage.py start_curation
 
-* Frontend: [http://localhost:3000](http://localhost:3000)
-* API Backend: [http://localhost:8000/api/](http://localhost:8000/api/)
-* Admin Django: [http://localhost:8000/admin/](http://localhost:8000/admin/)
-* Flower: [http://localhost:5555](http://localhost:5555)
+Para Agendamento Contínuo: Configure a frequência de execução das tarefas produtoras (agent.tasks.generate_news_task, etc.) no Django Admin (Seção Celery Beat).
 
----
+🌐 Endpoints Principais
+Frontend: http://localhost:3000
 
-### 🐳 Docker Compose
+API Backend: http://localhost:8000/api/
 
-```yaml
-version: "3.9"
+Admin Django: http://localhost:8000/admin/
 
-services:
-  backend:
-    build:
-      context: .
-      dockerfile: setup/Dockerfile
-    container_name: django_app
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env
-    depends_on:
-      - db
-      - redis
+Flower (Monitor Celery): http://localhost:5555
 
-  frontend:
-    build: ./webapp
-    container_name: react_app
-    volumes:
-      - ./webapp:/app
-      - /app/node_modules
-    ports:
-      - "3000:3000"
-    stdin_open: true
-    tty: true
-
-  celery:
-    build:
-      context: .
-      dockerfile: setup/Dockerfile
-    container_name: celery_worker
-    command: celery -A setup worker --loglevel=info
-    volumes:
-      - .:/app
-    env_file:
-      - .env
-    depends_on:
-      - backend
-      - redis
-
-  flower:
-    image: mher/flower:latest
-    container_name: flower
-    command: flower --broker=redis://redis:6379/0 --port=5555
-    ports:
-      - "5555:5555"
-    depends_on:
-      - redis
-      - celery
-
-  db:
-    image: postgres:16
-    container_name: postgres_db
-    restart: always
-    environment:
-      POSTGRES_DB: ${DB_NAME:-smartnews}
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "${DB_PORT:-5432}:5432"
-
-  redis:
-    image: redis:7-alpine
-    container_name: redis_broker
-    ports:
-      - "6379:6379"
-
-volumes:
-  postgres_data:
-```
-
----
-
-### 🔌 API Endpoints
-
-* `admin/`
-* `api/news/` [name='news-list']
-* `api/news/categories/` [name='news-categories']
-* `api/user/register/` [name='user-register']
-* `api/user/login/` [name='user-login']
-* `api/user/preferences/` [name='user-preferences']
-* `api/token/` [name='token_obtain_pair']
-* `api/token/refresh/` [name='token_refresh']
-
-**Exemplo de Resposta**
-
-```json
-{
-    "id": 34,
-    "title": "Lançamento do NeuroChip X2 pela CloudX",
-    "content": "A CloudX anunciou hoje o lançamento do NeuroChip X2...",
-    "summary": "A CloudX anunciou hoje o lançamento do NeuroChip X2...",
-    "source": "IDC",
-    "category": {
-        "id": 3,
-        "name": "Negócios"
-    },
-    "published_at": "2025-09-25T23:52:24.072986Z",
-    "created_at": "2025-09-26T03:52:24.153771Z"
-}
-```
-
----
-
-✅ **Funcionalidades Implementadas**
-
-* Backend API REST com Django REST Framework
-* Frontend React responsivo com paginação
-* Filtros por período (dia/semana/mês)
-* Agente Curador High-Code para geração de conteúdo
-* Banco PostgreSQL com modelagem relacional
-* Docker Compose para orquestração de serviços
-* Sistema de Mensageria (Redis + Celery)
-* Processamento Assíncrono de conteúdo
-* Arquitetura Headless completa
-* Containerização com Docker
-* Organização de Código em estrutura modular
-* Testes Unitários
-
----
-
-🔧 **Desenvolvimento Local**
-
-### Backend Standalone
-
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-pip install -r requirements.txt
-python manage.py runserver
-```
-
-### Frontend Standalone
-
-```bash
-cd frontend
-npm install
-npm start
-```
-
-### Executar Celery Worker
-
-```bash
-cd backend
-celery -A newsletter worker --loglevel=info
-```
-
-### Executar Flower
-
-```bash
-celery -A newsletter flower --port=5555
-```
-
----
-
-🏛️ **Arquitetura do Agente Curador**
-
-O agente curador implementa um sistema high-code de processamento de conteúdo:
-
-* **Geração de Conteúdo:** Cria notícias baseadas em templates e regras de negócio
-* **Processamento Assíncrono:** Utiliza Celery para processamento em background
-* **Classificação Inteligente:** Categoriza automaticamente o conteúdo
-* **Persistência:** Salva dados estruturados no PostgreSQL
-
-**Fluxo de Processamento**
-Agente Trigger → **Redis Queue** → Celery Worker → Content Processing → Database
-
----
-
-### `.env.example` integrado
-
-```env
-# ===========================
-# Django Settings
-# ===========================
-
-SECRET_KEY=your-secret-key-here
-DEBUG=True
-ALLOWED_HOSTS=*
-
-# ===========================
-# Database
-# ===========================
-
-DB_NAME=''
-DB_USER=''
-DB_PASSWORD=''
-DB_HOST=''
-DB_PORT=''
-
-DATABASE_URL=''
-
-# ===========================
-# Celery / Redis
-# ===========================
-
-CELERY_BROKER_URL=''
-CELERY_RESULT_BACKEND=''
-
-# ===========================
-# Flower
-# ===========================
-
-FLOWER_PORT=''
-```
+🏛️ Fluxo de Processamento do Agente Curador
+Agente Trigger (start_curation.py) → Redis Queue (producer) → Celery Worker (celery_producer) → Roteamento → Redis Queue (consumer) → Celery Worker (celery_consumer com Gemini Service) → PostgreSQL (Persistência)
