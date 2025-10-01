@@ -11,15 +11,18 @@ class GeminiService:
             content = news_dict.get("content", "No Content")
 
             prompt = f"Faça um resumo conciso e profissional a seguinte notícia em 40 palavras :\n\nTítulo: {title}\nConteúdo: {content}\n"
-            response = self.client.generate_text(
-                model="gemini-1.5-flashgemini-2.5-flash",
-                prompt=prompt,
-                temperature=0.7,
+            
+            response = self.client.models.generate_content( 
+                model="gemini-2.5-flash", 
+                contents=prompt,
+                config=genai.types.GenerateContentConfig(
+                    temperature=0.7,
+                )
             )
+            
             summary = response.text.strip()
             return summary
-        
+            
         except Exception as e:
             print(f"Erro ao gerar resumo com Gemini: {e}")
-            return "Resumo indisponível."
-
+            return "Resumo indisponível, error: " + str(e)
