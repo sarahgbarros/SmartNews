@@ -16,7 +16,7 @@ import os
 import sys
 
 if sys.platform == 'win32':
-   
+
     CELERY_WORKER_POOL = 'threads'
     CELERY_WORKER_CONCURRENCY = 4
     
@@ -30,10 +30,7 @@ if sys.platform == 'win32':
     CELERY_TASK_ACKS_LATE = True
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(os.path.join(BASE_DIR, ".env"))
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv(BASE_DIR / ".env", encoding='utf-8')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/

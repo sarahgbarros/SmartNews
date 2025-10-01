@@ -7,6 +7,7 @@ from agent.utils import read_csv, read_json
 from .consumer import process_and_save_news_task
 from typing import List, Dict
 
+
 TEMPLATES: List[Dict[str, str]] = [
     {
         "title": "Lançamento do {product} pela {company}",
@@ -103,10 +104,10 @@ DATASETS = {
 }
 
 CATEGORIES = [
-    {"id": 1, "name": "Tecnologia"},
-    {"id": 2, "name": "Negócios"},
-    {"id": 3, "name": "Ciência"},
-    {"id": 4, "name": "Energia"},
+    {"name": "Tecnologia"},
+    {"name": "Negócios"},
+    {"name": "Ciência"},
+    {"name": "Energia"},
 ]
 
 @shared_task(name="generate_news_task")

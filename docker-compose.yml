@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   backend:
     build:
@@ -59,7 +57,7 @@ services:
     build:
       context: .
       dockerfile: setup/Dockerfile
-    container_name: celery_consumer
+    container_name: celery_consumer  
     command: celery -A setup worker -Q consumer --loglevel=info
     volumes:
       - .:/app

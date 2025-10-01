@@ -13,6 +13,7 @@ def read_csv(filepath: str) -> List[Dict]:
         return df.to_dict('records')
         
     except Exception as e:
+        logger.error(f"Erro ao ler CSV: {e}")
         return e
 
 
@@ -34,7 +35,7 @@ def read_json(filepath: str) -> List[Dict]:
         return [data]
             
     except Exception as e:
-        
+        logger.error(f"Erro ao ler JSON: {e}")
         return e
 
 

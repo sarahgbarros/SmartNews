@@ -1,6 +1,7 @@
 from django.test import TestCase
 from news.models import News
-from agent.generate_news import generate_news, import_news_from_files
+from .news.generate_news import generate_news, import_news_from_files
+from .agent.services.gemini import GeminiService
 
 class GenerateNewsTest(TestCase):
     def test_generate_news_creates_new_entry(self):
@@ -18,5 +19,11 @@ class ImportNewsTest(TestCase):
         self.assertIsInstance(result, str)
         self.assertIn("notícias importadas", result)
         self.assertGreater(News.objects.count(), 0)
+
+class GeminiTest(TestCase):
+    def test_gemini_integration(self):
+        result = GeminiService.generate_text("Test prompt")
+        self.assertIsInstance(result, str)
+        self.assertTrue(True)  
 
 

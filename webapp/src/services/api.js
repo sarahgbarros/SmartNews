@@ -128,7 +128,7 @@ export const getNews = async (period, categories = []) => {
     };
 
     if (categories && categories.length > 0) {
-        params.category__in = categories.join(',');
+        params.category__in = categories.join(",");
     }
     
     const queryParams = new URLSearchParams(params).toString();
@@ -142,29 +142,6 @@ export const getNews = async (period, categories = []) => {
         throw error;
     }
 };
-
-
-export async function savePreferences(categories = []) {
-    const url = `${API_URL}/user/preferences/`;
-    
-    const updatedUser = await fetchWithAuth(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ categories }),
-    });
-
-    const currentToken = getAccess();
-    if (currentToken && updatedUser) {
-        setAuthData(currentToken, updatedUser);
-        return updatedUser;
-    }
-    
-    if (!updatedUser && currentToken) {
-        const currentUser = getUserData();
-        return currentUser; 
-    }
-    return updatedUser;
-}
 
 export const getCategories = async () => {
     const url = `${API_URL}/news/categories/`; 
