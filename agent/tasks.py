@@ -104,10 +104,10 @@ DATASETS = {
 }
 
 CATEGORIES = [
-    {"id": 1, "name": "Tecnologia"},
-    {"id": 2, "name": "Negócios"},
-    {"id": 3, "name": "Ciência"},
-    {"id": 4, "name": "Energia"},
+    {"name": "Tecnologia"},
+    {"name": "Negócios"},
+    {"name": "Ciência"},
+    {"name": "Energia"},
 ]
 
 @shared_task(name="generate_news_task")
