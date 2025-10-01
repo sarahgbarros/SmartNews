@@ -7,6 +7,7 @@ from agent.utils import read_csv, read_json
 from .consumer import process_and_save_news_task
 from typing import List, Dict
 
+
 TEMPLATES: List[Dict[str, str]] = [
     {
         "title": "Lançamento do {product} pela {company}",

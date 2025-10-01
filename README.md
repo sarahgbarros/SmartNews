@@ -68,20 +68,14 @@ cp .env.example .env
 3. Execute com Docker Compose
 Este comando inicia todos os 7 serviços (DB, Redis, Backend, Frontend, Produtor, Consumidor, Beat e Flower):
 
-docker-compose up --build
+docker compose up --build
 
-4. Setup Inicial
-Execute as migrações do banco de dados e a coleta de arquivos estáticos (essencial para o Admin):
-
-docker-compose exec backend python manage.py migrate --noinput
-docker-compose exec backend python manage.py collectstatic --noinput
-
-5. Iniciar a Curadoria
+4. Iniciar a Curadoria
 O fluxo de curadoria é iniciado através de uma task Celery.
 
 Para Teste Imediato: Dispare o processo usando o Management Command:
 
-docker-compose exec backend python manage.py start_curation
+docker exec django_app python manage.py start_curation
 
 Para Agendamento Contínuo: Configure a frequência de execução das tarefas produtoras (agent.tasks.generate_news_task, etc.) no Django Admin (Seção Celery Beat).
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import NewsPage from "./pages/NewsPage";
-import PreferencesPage from "./pages/PreferencesPage";
 import { getNews } from "./services/api"; 
 
 const arraysEqual = (a, b) => {
@@ -30,49 +29,43 @@ const App = () => {
 
     const handleRegisterSuccess = () => {
         setUser(true);
-        setView("preferences"); 
+        setView("news"); 
     };
 
-    const handlePreferencesSave = (selectedCategories) => {
-        if (!arraysEqual(categories, selectedCategories)) {
-            setCategories(selectedCategories);
-        }
-        setView("news");
-    };
 
     const handleBackToNews = () => {
         setView("news"); 
     }
 
     useEffect(() => {
-        const fetchNews = async () => {
-            try {
+    const fetchNews = async () => {
+        try {
                 
-                const categoriesToFetch = categories.length > 0 
-                    ? categories 
-                    : ['general']; 
+            const categoriesToFetch = categories.length > 0 
+                ? categories 
+                : ['general']; 
                     
-                const data = await getNews(period, categoriesToFetch);
+            const data = await getNews(period, categoriesToFetch);
+
+            if (Array.isArray(data)) {
                 setNews(data);
-            } catch (err) {
-                console.error("Error fetching news:", err);
+            } else if (data && Array.isArray(data.results)) {
+                setNews(data.results);
+            } else {
+                setNews([]);
             }
-        };
-        fetchNews();
-    }, [period, categories]); 
+        } catch (err) {
+            console.error("Error fetching news:", err);
+        }
+    };
+    fetchNews();
+}, [period, categories]);
+
 
     return (
         <div className="container">
             {view === "login" && <LoginForm onSuccess={handleLoginSuccess} />}
-            {view === "register" && <RegisterForm onSuccess={handleRegisterSuccess} />}
-            
-            {view === "preferences" && (
-                <PreferencesPage 
-                    onSave={handlePreferencesSave} 
-                    onBack={handleBackToNews} 
-                />
-            )}
-            
+            {view === "register" && <RegisterForm onSuccess={handleRegisterSuccess} />}           
             {view === "news" && (
                 <NewsPage 
                     userCategories={categories}
@@ -85,8 +78,6 @@ const App = () => {
             <div style={{ marginTop: "20px", textAlign: "center" }}>
                 {!user && view !== "login" && <button onClick={() => setView("login")}>Entrar</button>}
                 {!user && view !== "register" && <button onClick={() => setView("register")}>Registrar</button>}
-                
-                {user && view !== "preferences" && <button onClick={() => setView("preferences")}>Preferências</button>}
                 {user && <button onClick={() => setUser(null) || setView("news")}>Sair</button>} 
                 
                 {view !== "news" && <button onClick={() => setView("news")}>Notícias</button>}
